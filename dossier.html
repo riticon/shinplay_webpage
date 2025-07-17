@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHINPLAY // The Future of Badminton</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-color: #2aba7f;
+            --dark-bg: #121418;
+            --light-text: #f0f0f0;
+            --secondary-text: #a0a0a0;
+            --card-bg: #1A1C20; 
+            --border-color: rgba(60, 60, 60, 0.5);
+            --glow-color: rgba(42, 186, 127, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            padding: 1rem;
+        }
+
+        /* --- FINAL & CORRECTED BACK BUTTON --- */
+        .back-button {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 44px;
+            height: 44px;
+            background-color: transparent;
+            /* UPDATED: This makes the border visible by default */
+            border: 1px solid var(--secondary-text); 
+            border-radius: 50%;
+            text-decoration: none;
+            color: var(--light-text); 
+            z-index: 100;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow: hidden;
+        }
+        
+        .back-button svg {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            /* UPDATED: Explicitly set the initial stroke color to be visible */
+            stroke: var(--light-text); 
+            transition: stroke 0.3s ease, transform 0.3s ease;
+        }
+        
+        .back-button span {
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease 0.1s;
+        }
+
+        .back-button:hover {
+            width: 150px;
+            border-radius: 30px;
+            background-color: rgba(42, 186, 127, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color); 
+            justify-content: flex-start;
+            padding-left: 10px;
+        }
+
+        .back-button:hover svg {
+            /* On hover, the SVG stroke turns green */
+            stroke: var(--primary-color);
+        }
+
+        .back-button:hover span {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .bg-animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-trajectories {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150vmax;
+            height: 150vmax;
+            transform: translate(-50%, -50%);
+        }
+
+        .bg-trajectories path {
+            fill: none;
+            stroke: var(--primary-color);
+            stroke-width: 0.5;
+            opacity: 0.1;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        .container {
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid rgba(42, 186, 127, 0.2);
+            border-radius: 16px;
+            padding: 2.5rem 3rem;
+            max-width: 800px;
+            width: 100%;
+            z-index: 1;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        
+        .logo {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--light-text);
+            letter-spacing: 2px;
+            margin-bottom: 3rem;
+        }
+        .logo .highlight {
+            color: var(--primary-color);
+        }
+
+        .content .main-headline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .content .highlight {
+            color: var(--primary-color);
+        }
+
+        .content .sub-headline {
+            font-size: 1rem;
+            color: var(--secondary-text);
+            max-width: 450px;
+            margin: 0 auto 3rem auto;
+        }
+        
+        .divider {
+            border: none;
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 2.5rem 0;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            gap: 1.5rem;
+        }
+        .stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary-text);
+            margin-top: 0.5rem;
+        }
+        
+        .status-section {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .status-section h3 {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 400px;
+            height: 6px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 auto 3rem auto;
+        }
+        .progress-bar-inner {
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .coming-soon-message {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--light-text);
+            letter-spacing: 0.3em;
+            text-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .g-child { display: inline-block; }
+
+        @media (max-width: 768px) {
+            .back-button { top: 20px; left: 20px; }
+            .back-button:hover { width: 44px; }
+            .back-button:hover span { opacity: 0; }
+            .container { padding: 2rem 1.5rem; }
+            .content .main-headline { font-size: 2rem; }
+            .stats-grid { flex-direction: column; gap: 2.5rem; }
+            .stat-value { font-size: 2rem; }
+            .coming-soon-message { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-button">
+        <!-- The SVG no longer needs stroke="currentColor" as it's directly styled in CSS -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>About Us</span>
+    </a>
+
+    <div class="bg-animation-container">
+        <svg class="bg-trajectories" viewBox="0 0 1000 1000">
+            <path d="M10 490 Q 250 10, 490 250 T 990 490" />
+            <path d="M990 510 Q 750 990, 510 750 T 10 510" />
+            <path d="M50 50 Q 500 500, 950 950" />
+            <path d="M950 50 Q 500 500, 50 950" />
+            <path d="M500 10 Q 10 500, 500 990" />
+            <path d="M10 250 Q 500 10, 990 250" />
+        </svg>
+    </div>
+
+    <div class="container">
+        <h1 class="logo">
+            <span class="g-child highlight">SHIN</span><span class="g-child">PLAY</span>
+        </h1>
+
+        <main class="content">
+            <h2 class="main-headline">
+                <span class="g-child">The</span> <span class="g-child">Game</span> <span class="g-child">is</span> <span class="g-child">About</span> <span class="g-child">to</span> <span class="g-child highlight">Change.</span>
+            </h2>
+            <p class="sub-headline">The Official Platform for Tournament Management & Player Analytics.</p>
+        </main>
+
+        <hr class="divider">
+
+        <section class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value"><span id="smash-speed">0</span> km/h</div>
+                <div class="stat-label">Max Smash Speed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><span id="rally-count">0</span></div>
+                <div class="stat-label">Longest Rally</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><span id="shot-accuracy">0</span>%</div>
+                <div class="stat-label">Shot Accuracy</div>
+            </div>
+        </section>
+
+        <hr class="divider">
+        
+        <section class="status-section">
+            <h3 class="status-text"></h3>
+            <div class="progress-bar">
+                <div class="progress-bar-inner"></div>
+            </div>
+            <div class="coming-soon-message">
+                 <!-- Populated by GSAP -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/TextPlugin.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(TextPlugin);
+        
+        const statusText = "SYSTEM CALIBRATING...";
+        const comingSoonText = "COMING SOON";
+
+        gsap.to(".bg-trajectories path", {
+            strokeDashoffset: 0,
+            duration: 2,
+            ease: "power1.inOut",
+            stagger: { each: 0.5, repeat: -1, yoyo: true, repeatDelay: 2 }
+        });
+
+        const mainTl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+        document.querySelector('.coming-soon-message').innerHTML = comingSoonText.split("").map(char => `<span class="g-child">${char === ' ' ? ' ' : char}</span>`).join("");
+        
+        mainTl.to(".container", { opacity: 1, scale: 1, duration: 1.2 })
+          
+          .to(".back-button", { opacity: 1, x: 0, duration: 1 }, "-=1")
+          
+          .from([".logo .g-child", ".main-headline .g-child"], { y: 30, opacity: 0, duration: 0.8, stagger: 0.1 }, "-=0.8")
+
+          .from(".sub-headline", { y: 20, opacity: 0, duration: 1 }, "-=0.6")
+          
+          .from(".divider", { scaleX: 0, duration: 1, stagger: 0.2 }, "-=0.8")
+
+          .from(".stat-item", { autoAlpha: 0, y: 20, stagger: 0.2, duration: 0.8 }, "-=0.5")
+          
+          .to("#smash-speed", { innerHTML: 215, duration: 2, snap: "innerHTML" }, "-=0.8")
+          .to("#rally-count", { innerHTML: 41, duration: 2, snap: "innerHTML" }, "-=2")
+          .to("#shot-accuracy", { innerHTML: 93, duration: 2, snap: "innerHTML" }, "-=2")
+          
+          .to(".status-section", { autoAlpha: 1, duration: 0.5 }, "+=0.5")
+
+          .to(".status-text", { text: { value: statusText, delimiter: "" }, duration: 1.5, ease: "none" })
+          
+          .to(".progress-bar-inner", { width: "100%", duration: 2, ease: "power1.inOut" }, "-=1");
+
+        const comingSoonTl = gsap.timeline({
+            repeat: -1,
+            repeatDelay: 1.6,
+            paused: true,
+            defaults: { ease: "power2.out" }
+        });
+        
+        comingSoonTl.fromTo(".coming-soon-message .g-child", 
+            { y: 30, opacity: 0, scale: 1.5 },
+            { y: 0, opacity: 1, scale: 1, ease: "back.out(1.7)", stagger: 0.1, duration: 0.8 }
+        )
+        .to(".coming-soon-message", {
+            textShadow: "0 0 25px var(--glow-color), 0 0 50px var(--primary-color)",
+            repeat: 1,
+            yoyo: true,
+            duration: 0.7,
+            ease: "power1.inOut"
+        }, "-=0.5");
+
+        mainTl.eventCallback("onComplete", () => {
+            comingSoonTl.play();
+        });
+            
+    </script>
+
+</body>
+</html>

@@ -3,9 +3,475 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shinplay</title>
+    <title>SHINPLAY // Elevate Your Badminton Game</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2aba7f;
+            --dark-bg: #121212;
+            --light-bg: #1a1a1a;
+            --light-text: #f0f0f0;
+            --dark-text: #1a1a1a;
+            --border-color: rgba(42, 186, 127, 0.25);
+            --primary-glow: rgba(42, 186, 127, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND --- */
+        .svg-bg-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0; overflow: hidden;
+        }
+        #svg-swoosh {
+            position: absolute; top: -20%; left: -30%;
+            width: 160%; height: 160%;
+            stroke: var(--primary-color);
+            stroke-width: 1.5px; fill: none; opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+
+        /* --- GLOBAL & REUSABLE --- */
+        .container {
+            width: 100%; max-width: 1200px;
+            margin: 0 auto; padding: 0 2rem;
+            position: relative; z-index: 2;
+        }
+        section { padding: 6rem 0; }
+        .section-title {
+            font-size: 2.8rem; font-weight: 700;
+            text-align: center; margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            font-family: 'Roboto Mono', monospace; text-align: center;
+            color: var(--primary-color); margin-bottom: 4rem;
+        }
+        .highlight { color: var(--primary-color); }
+        .cta-button {
+            display: inline-block; font-family: 'Roboto Mono', monospace;
+            font-size: 1rem; font-weight: 700; color: var(--dark-text);
+            background-color: var(--primary-color); padding: 15px 35px;
+            text-decoration: none; text-transform: uppercase;
+            border: 2px solid var(--primary-color); border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: transparent; color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(42, 186, 127, 0.5);
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: absolute; width: 100%;
+            padding: 1.5rem 0; z-index: 10;
+        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; }
+        .logo {
+            font-family: 'Roboto Mono', monospace; font-size: 1.8rem; font-weight: 700;
+            color: var(--primary-color);
+        }
+        .logo span { color: var(--light-text); }
+        .nav-links a {
+            color: var(--light-text); text-decoration: none;
+            margin: 0 1rem; font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--primary-color); }
+
+        /* --- HERO SECTION --- */
+        #hero { display: flex; align-items: center; min-height: 100vh; padding-top: 5rem; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 3rem; }
+        .hero-content h1 { font-size: 4rem; font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero-content p { font-size: 1.1rem; margin-bottom: 2rem; color: rgba(240, 240, 240, 0.8); max-width: 500px; }
+        .hero-cta-group { display: flex; align-items: center; gap: 1rem; }
+        .hero-cta-group .secondary-link {
+            color: var(--light-text); text-decoration: none; font-family: 'Roboto Mono', monospace;
+            border-bottom: 2px solid transparent; transition: all 0.3s ease;
+        }
+        .hero-cta-group .secondary-link:hover { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .app-mockup {
+            background: #2a2a2a; border-radius: 20px; padding: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
+        }
+        .mockup-header { display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.75rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+        .mockup-header div { height: 10px; border-radius: 5px; }
+        .mockup-header .red { width: 10px; background: #ff5f56; }
+        .mockup-header .yellow { width: 10px; background: #ffbd2e; }
+        .mockup-header .green { width: 40px; background: #27c93f; }
+        .mockup-player { display: flex; align-items: center; gap: 1rem; }
+        .mockup-player-avatar {
+            width: 70px; height: 70px; background: var(--primary-color); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; font-weight: 700; color: var(--dark-bg);
+        }
+        .mockup-player-name h3 { font-size: 1.5rem; }
+        .mockup-player-name p { font-family: 'Roboto Mono'; color: var(--primary-color); font-size: 0.9rem; }
+        .mockup-stats { margin-top: 1.5rem; }
+        .stat-item { display: flex; justify-content: space-between; align-items: center; font-family: 'Roboto Mono'; margin-bottom: 0.75rem; font-size: 0.9rem; }
+        .stat-bar { height: 8px; background: #444; border-radius: 4px; overflow: hidden; }
+        .stat-bar div { height: 100%; background: var(--primary-color); border-radius: 4px; }
+        
+        
+        /* --- FEATURES SECTION --- */
+        #features { background-color: var(--light-bg); }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .feature-card {
+            background-color: var(--dark-bg);
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 25px 5px var(--primary-glow);
+        }
+        .feature-icon { margin-bottom: 1.5rem; color: var(--primary-color); }
+        .feature-icon svg {
+            width: 48px;
+            height: 48px;
+        }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--light-text); }
+        .feature-card p { font-size: 1rem; line-height: 1.7; color: rgba(240, 240, 240, 0.8); }
+        
+
+        /* --- AUDIENCE/PLAYER CARDS SECTION --- */
+        #players { }
+        .player-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .player-card {
+            border: 1px solid var(--border-color); border-radius: 12px;
+            overflow: hidden; background-color: var(--light-bg);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform: translateY(0);
+        }
+        .player-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 25px var(--primary-glow);
+        }
+        .player-card-image {
+            height: 250px; background-size: cover; background-position: center;
+            filter: grayscale(1) contrast(1.1); position: relative;
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+        .player-card:hover .player-card-image {
+            transform: scale(1.05);
+            filter: none;
+        }
+        .player-card-image::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(26, 26, 26, 1) 20%, rgba(26, 26, 26, 0) 60%);
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+        .player-card:hover .player-card-image::after {
+            opacity: 0;
+        }
+        
+        #player-card-1 { background-image: url('assets/image1.png'); }
+        #player-card-2 { background-image: url('assets/image2.png'); }
+        #player-card-3 { background-image: url('assets/image3.png'); }
+        
+        .player-card-content {
+            padding: 2.5rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 280px;
+        }
+        .player-card-icon {
+             margin-bottom: 2rem; 
+             color: var(--primary-color);
+        }
+        .player-card-icon svg {
+            width: 96px;
+            height: 96px;
+        }
+        .player-card h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--light-text); }
+        .player-card p { color: rgba(240, 240, 240, 0.7); line-height: 1.6; }
+        
+        /* --- FINAL CTA SECTION --- */
+        #cta { text-align: center; }
+        #cta p { max-width: 600px; margin: -2rem auto 2rem; font-size: 1.1rem; color: rgba(240, 240, 240, 0.8); }
+
+        /* --- FOOTER --- */
+        footer { padding: 3rem 0; text-align: center; background-color: #000; }
+        footer p { color: rgba(240, 240, 240, 0.5); }
+        footer a { color: var(--primary-color); text-decoration: none; transition: color 0.3s ease; }
+        footer a:hover { color: var(--light-text); }
+        
+        /* --- ICON ANIMATIONS --- */
+        @keyframes icon-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes icon-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        @keyframes icon-wobble {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+            100% { transform: rotate(0deg); }
+        }
+        @keyframes icon-nudge-up {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .icon-rotate svg { animation: icon-rotate 4s linear infinite; }
+        .icon-pulse svg { animation: icon-pulse 2s ease-in-out infinite; }
+        .icon-wobble svg { animation: icon-wobble 2.5s ease-in-out infinite; }
+        .icon-nudge-up svg { animation: icon-nudge-up 2.2s ease-in-out infinite; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-content p { margin-left: auto; margin-right: auto; }
+            .hero-cta-group { justify-content: center; }
+            .app-mockup { margin: 3rem auto 0; transform: perspective(1000px) rotateY(0) rotateX(0); }
+            .player-cards-grid, .features-grid { grid-template-columns: 1fr; }
+            .player-card { max-width: 400px; margin: 0 auto; }
+            .nav-links { display: none; }
+        }
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 3rem; }
+            .section-title { font-size: 2.2rem; }
+        }
+
+    </style>
 </head>
 <body>
+
+    <div class="svg-bg-container">
+        <svg id="svg-swoosh" viewBox="0 0 1000 1000">
+            <path d="M-100,500 Q500,-200 1100,500 T2100,500" />
+            <path d="M-100,600 Q500,-100 1100,600 T2100,600" stroke-opacity="0.5" />
+        </svg>
+    </div>
+
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">SHIN<span>PLAY</span></div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#players">For Players</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section id="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <h1>The Ultimate <span class="highlight">Badminton</span> Analytics Platform</h1>
+                        <p>Unlock your potential with data-driven insights. SHINPLAY tracks every shot, analyzes every match, and provides a clear path to domination.</p>
+                        <div class="hero-cta-group">
+                            <a href="dossier.html" class="cta-button">Unlock The Protocol</a>
+                            <a href="dossier.html" class="secondary-link">View Tech Dossier →</a>
+                        </div>
+                    </div>
+                    <div class="app-mockup">
+                        <div class="mockup-header">
+                            <div class="red"></div><div class="yellow"></div><div class="green"></div>
+                        </div>
+                        <div class="mockup-player">
+                            <div class="mockup-player-avatar">JS</div>
+                            <div class="mockup-player-name">
+                                <h3>J. Smith</h3>
+                                <p>STATUS: ACTIVE</p>
+                            </div>
+                        </div>
+                        <div class="mockup-stats">
+                            <div class="stat-item"><span>Smash Accuracy</span><span>88%</span></div>
+                            <div class="stat-bar"><div style="width: 88%;"></div></div>
+                            <div class="stat-item"><span>Net Play Success</span><span>92%</span></div>
+                            <div class="stat-bar"><div style="width: 92%;"></div></div>
+                            <div class="stat-item"><span>Court Coverage</span><span>76%</span></div>
+                            <div class="stat-bar"><div style="width: 76%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section id="features">
+            <div class="container">
+                <h2 class="section-title">Gain Your Competitive Edge</h2>
+                <p class="section-subtitle">// SYSTEM CAPABILITIES</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon icon-rotate">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                        </div>
+                        <h3>Shot Pattern Analysis</h3>
+                        <p>Visualize your most effective shots and your opponent's weaknesses. Our AI breaks down rally patterns to reveal winning strategies.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon icon-pulse">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        </div>
+                        <h3>Live Match Intelligence</h3>
+                        <p>Get real-time feedback during matches. Track player fatigue, rally length, and momentum shifts to make crucial in-game adjustments.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon icon-wobble">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3>Performance Forecasting</h3>
+                        <p>Our predictive models analyze your data to forecast performance trends, helping you peak at the right moments for key tournaments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLAYER CARDS SECTION -->
+        <section id="players">
+            <div class="container">
+                <h2 class="section-title">For Every Level of Play</h2>
+                <p class="section-subtitle">// UNLOCK YOUR POTENTIAL</p>
+                <div class="player-cards-grid">
+                    <div class="player-card">
+                        <div class="player-card-image" id="player-card-1"></div>
+                        <div class="player-card-content">
+                            <div class="player-card-icon icon-nudge-up">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                            </div>
+                            <h3>The Rising Star</h3>
+                            <p>Track your progress, benchmark against peers, and build a data-backed profile to get noticed.</p>
+                        </div>
+                    </div>
+                     <div class="player-card">
+                        <div class="player-card-image" id="player-card-2"></div>
+                        <div class="player-card-content">
+                            <div class="player-card-icon icon-wobble">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            </div>
+                            <h3>The Elite Pro</h3>
+                            <p>Fine-tune every aspect of your game with granular data, opponent scouting, and advanced tactical insights.</p>
+                        </div>
+                    </div>
+                     <div class="player-card">
+                        <div class="player-card-image" id="player-card-3"></div>
+                        <div class="player-card-content">
+                             <div class="player-card-icon icon-pulse">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                            </div>
+                            <h3>The Strategic Coach</h3>
+                            <p>Manage your team, analyze performance trends, and develop winning strategies backed by objective data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL CTA SECTION -->
+        <section id="cta">
+            <div class="container">
+                <h2 class="section-title">Ready to Redefine Your Game?</h2>
+                <p>You've seen the surface. Now it's time to see what's really powering the next generation of badminton.</p>
+                <a href="dossier.html" class="cta-button">Access The Full Briefing</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 SHINPLAY. All Rights Reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a></p>
+        </div>
+    </footer>
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // --- INTERACTIVE MOCKUP CARD ---
+        const mockup = document.querySelector(".app-mockup");
+        const maxRotation = 12; let auraTimeline; 
+        mockup.addEventListener("mouseenter", e => {
+            if (auraTimeline) auraTimeline.kill();
+            gsap.to(mockup, { duration: 0.5, rotationX: 0, rotationY: 0, ease: "power2.out" });
+            auraTimeline = gsap.timeline({ repeat: -1, yoyo: true });
+            auraTimeline.fromTo(mockup, { boxShadow: `0 0 25px 0px hsla(155, 63%, 50%, 0)` }, { boxShadow: `0 0 50px 10px hsla(155, 63%, 50%, 0.4)`, duration: 1.5, ease: "power1.inOut" });
+        });
+        mockup.addEventListener("mousemove", e => {
+            const rect = mockup.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left, mouseY = e.clientY - rect.top;
+            const xPercent = (mouseX / rect.width) - 0.5, yPercent = (mouseY / rect.height) - 0.5;
+            const rotateX = -yPercent * maxRotation, rotateY = xPercent * maxRotation;
+            gsap.to(mockup, { duration: 0.8, rotationX: rotateX, rotationY: rotateY, ease: "power1.out", overwrite: "auto" });
+        });
+        mockup.addEventListener("mouseleave", e => {
+            if (auraTimeline) auraTimeline.kill();
+            gsap.to(mockup, { duration: 1.2, rotationX: 5, rotationY: -10, boxShadow: `0 25px 50px -12px rgba(0,0,0,0.5)`, ease: "elastic.out(1, 0.5)" });
+        });
+
+        // --- INITIAL LOAD ANIMATIONS ---
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        tl.from(".logo", { opacity: 0, y: -20, duration: 0.8, delay: 0.2 })
+          .from(".nav-links a", { opacity: 0, y: -20, duration: 0.8, stagger: 0.1 }, "-=0.5")
+          .from(".hero-content h1", { opacity: 0, y: 20, duration: 1 }, "-=0.6")
+          .from(".hero-content p", { opacity: 0, y: 20, duration: 1 }, "-=0.8")
+          .from(".hero-cta-group", { opacity: 0, y: 20, duration: 1 }, "-=0.8")
+          .from(".app-mockup", { opacity: 0, duration: 1.2 }, "-=0.8");
+
+        // --- SCROLL-BASED ANIMATIONS ---
+        const animateOnScroll = (elem, y = 50, stagger = 0) => {
+            gsap.from(elem, {
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0, y: y, duration: 1,
+                stagger: stagger, ease: "power2.out"
+            });
+        };
+
+        // Animate section titles
+        gsap.utils.toArray('.section-title, .section-subtitle').forEach(el => animateOnScroll(el));
+        
+        // Animate Features Grid
+        gsap.from(".feature-card", {
+            scrollTrigger: {
+                trigger: ".features-grid",
+                start: "top 80%",
+            },
+            opacity: 0,
+            y: 60,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out"
+        });
+
+        // Animate Player Cards
+        animateOnScroll(".player-card", 50, 0.15);
+        
+        // Animate Final CTA
+        animateOnScroll("#cta p");
+        animateOnScroll("#cta .cta-button");
+
+    </script>
 </body>
 </html>
